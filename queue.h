@@ -1,45 +1,67 @@
+#ifndef __QUEUE_H__
+#define __QUEUE_H__
+
+#include <stdio.h>
 #include <stdbool.h>
 
-struct element {
+struct Element {
 	int data;
-	element next*;
-	int weight;
+	struct Element *next;
+	int priority;
 };
 
-typedef bool
+struct Element *Element_construct(int data, int priority);
+struct Element *Element_append(struct Element *other);
 
-element* element_construct(int data);
-element* element_append(element* other);
-
-typedef enum {
-	QUEUE_TYPE_NORMAL = 0,
-	QUEUE_TYPE_WEIGHTED = 1
-} queue_type;
-
-struct queue {
-	element first*;
-	element last*;
-	queue_type type;
+struct Queue {
+	struct Element *first;
+	struct Element *last;
 	int numElements;
 };
 
 /*
 Queue constructor
-should generate a valid queue object
+Generates a valid queue object
 */
-queue* queue_construct(queue_type type);
+struct Queue *Queue_construct();
 
 /*
 Pushes a new element into a queue
+param: the queue to act upon
+param: the data to push
 */
-void queue_push(queue* q, int data);
+void Queue_push(struct Queue *q, int data);
 
 /*
-Removes a
+Pushes a new element into the queue
+param: the queue to act upon
+param: the data to push into the queue
+param: the priority of the element
 */
-int queue_pop(queue* q, );
+void Queue_pushWithPriority(struct Queue *q, int data, int priority);
 
+/*
+Removes an element from the queue
+param: the queue to act upon
+param: will point to the popped value
+returns: false if the queue was empty before pop
+*/
+bool Queue_pop(struct Queue *q, int *output);
 
-int queue_peek(queue* q);
+/*
+Returns the first element from the queue without removing it
+param: the queue to act upon
+param: will point to the peeked value
+returns: false if the queue was empty before peek
+*/
+bool Queue_peek(struct Queue *q, int *output);
 
-int queue_find(queue* q, int data);
+/*
+Finds a value in the queue
+param: the queue to act upon
+param: the value to look for
+returns: the number of times a value occurs in the queue
+*/
+int Queue_find(struct Queue *q, int *needle);
+
+#endif // __QUEUE_H__
